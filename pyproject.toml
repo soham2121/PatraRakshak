@@ -1,0 +1,19 @@
+[project]
+name = "patrarakshak"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115", "uvicorn>=0.30", "python-multipart>=0.0.9",
+  "pypdf>=5", "defusedxml>=0.7", "scikit-learn>=1.5", "joblib",
+]
+
+[project.optional-dependencies]
+transformer = ["torch>=2.3", "transformers>=4.46"]
+train = ["patrarakshak[transformer]", "datasets>=3", "pandas", "pyarrow", "accelerate"]
+dev = ["pytest", "httpx", "pandas", "pyarrow"]
+
+[tool.setuptools]
+packages = ["patrarakshak"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
