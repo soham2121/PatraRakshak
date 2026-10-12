@@ -37,9 +37,11 @@ sha256sum -c models.sha256
 PR_TEST_MODEL_DIR=models/distilbert-v1 pytest -q
 ```
 
-- [ ] `sha256sum -c` prints `OK` for all five files.
-- [ ] pytest shows `36 passed, 2 xfailed`. The two xfails are known model weaknesses (see `MODEL_CARD.md`).
-- [ ] `PR_MODEL_DIR=models/distilbert-v1 uvicorn patrarakshak.api:app`, then scan `tests/fixtures/sample.pdf` in the UI. Expected: Suspicious, page 2.
+- [x] `sha256sum -c` prints `OK` for all five files.
+- [x] pytest shows `36 passed, 2 xfailed`. The two xfails are known model weaknesses (see `MODEL_CARD.md`).
+- [x] `PR_MODEL_DIR=models/distilbert-v1 uvicorn patrarakshak.api:app`, then scan `tests/fixtures/sample.pdf` in the UI. Expected: Suspicious, page 2.
+
+Done by Shantanu Puthran, 2026-10-12, on macOS (Apple silicon, Python 3.11). `shasum -a 256 -c models.sha256` gave OK for all five files. pytest: 36 passed, 2 xfailed. `sample.pdf` was scanned through the API (TestClient), not the browser UI: Suspicious, page 2.
 
 ## 3. Upload the frozen data to the team drive (Task 3, Step 4)
 
