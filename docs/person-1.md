@@ -19,12 +19,12 @@ Already done and on `main`: Task 1 (repo, CI) and Task 2 (`patrarakshak/text.py`
 
 | You need | Comes from | Status |
 |---|---|---|
-| `evals/metrics.py` (`choose_threshold`), `evals/evaluate.py`, `evals/hard_negatives.jsonl` | Task 4 (Person 2) | Next up |
-| `data/processed/{train,val,test}.parquet`, `external_wambosec.parquet` | Task 3 (Person 2) | After Task 4 |
-| `evals/docs.py`, `data/processed/docs_test*.json` | Task 9 (Person 2) | After Task 4 |
-| `patrarakshak/api.py`, `tests/fixtures/sample.pdf` | Tasks 5–6 (Person 3) | Later |
+| `evals/metrics.py` (`choose_threshold`), `evals/evaluate.py`, `evals/hard_negatives.jsonl` | Task 4 (Person 2) | ✅ on main |
+| `data/build.py` → `data/processed/{train,val,test}.parquet`, `external_wambosec.parquet` | Task 3 (Person 2) | ✅ on main |
+| `evals/docs.py`, `docs_test.json`, `docs_test_domain2.json` | Task 9 (Person 2) | ✅ on main |
+| `patrarakshak/api.py`, `tests/fixtures/sample.pdf` | Tasks 5–6 (Person 3) | ✅ on main |
 
-**You can start right away.** Write both training scripts now and get the Kaggle/Colab environment working. Use the quick export below until the real data lands.
+**Nothing blocks you any more.** Build the data with `python -m data.build`; it takes a few minutes because it streams Wikipedia. Then check that your file hashes match the table in `data/LABELING.md`. If a frozen file's hash differs, get the file from the team drive instead. You no longer need the quick export below.
 
 ## Setup
 
@@ -37,7 +37,7 @@ pytest -q   # should pass
 
 Work on your own branch (for example `p1-models`). Run every command from the repo root: `python -m train.baseline` needs that to import `evals` and `patrarakshak`.
 
-**Temporary data until Task 3 lands.** This writes the neuralchemy `core` split to the paths the scripts read. It's good enough to debug the scripts, but every number you get from it must be re-run once `python -m data.build` exists.
+**(Obsolete now that Task 3 is on main.)** This writes the neuralchemy `core` split to the paths the scripts read. It's good enough to debug the scripts, but every number you get from it must be re-run once `python -m data.build` exists.
 
 ```python
 # scratch only, do not commit
