@@ -24,7 +24,7 @@ Whole suite: **31 passed, 1 skipped** (the skip is the real-model edge-case test
 
 ## Not finished
 
-1. **Model upload (Task 13).** `models/distilbert-v1/` is local only. Upload it as a GitHub Release asset or to a Hugging Face repo, then load it on a second machine and run `sha256sum -c models.sha256`.
+1. **Model upload (Task 13): done.** GitHub Release `model-distilbert-v1`. A fresh clone, download and `sha256sum -c` passed on the release machine. Still to do: load it on a second machine.
 2. **Frozen data upload (Task 3, Step 4).** Copy `data/processed/test.parquet`, `docs_test.json` and `docs_test_domain2.json` to the team drive. A rebuild on 2026-10-12 reproduced all six hashes exactly.
 3. **UI keyboard check (Task 7).** It is still not done by hand; the browser extension was not connected. All controls are native, labelled elements, so it should pass.
 4. **Whole-branch review** of Tasks 3–12, by a person.
