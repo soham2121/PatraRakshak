@@ -50,6 +50,8 @@ The processed files keep each dataset's own `category` value. When reporting, ro
 | wambosec/prompt-injections | MIT | https://huggingface.co/datasets/wambosec/prompt-injections | 5,766 (train + test merged) | external test only | LLM-generated, heavy on obfuscation. A TF-IDF baseline trained on neuralchemy has 41.6% FPR here. Category labels are free-form. |
 | wikimedia/wikipedia `20231101.en` | CC BY-SA 4.0 / GFDL | https://huggingface.co/datasets/wikimedia/wikipedia | Articles 0–2999 (train), 3000–3599 (val), 3600–4199 (docs_test); disjoint by construction | benign document chunks, and hosts for embedded attacks | Encyclopedic register only. Embedded attacks are glued to a paragraph, so the boundary is easier than in real documents. |
 | FiscalNote/billsum `ca_test` | CC0-1.0 | https://huggingface.co/datasets/FiscalNote/billsum | First 600 California bills | `docs_test_domain2.json` (second document domain) | Legal register with many numbered clauses. It contains lots of "shall"/"must" wording, which is useful as a hard benign domain. |
+| wikimedia/wikipedia `20231101.mr` and `20231101.hi` | CC BY-SA 4.0 / GFDL | https://huggingface.co/datasets/wikimedia/wikipedia | Articles 0–799 (indic_train), 800–999 (indic_eval), per language | Marathi and Hindi benign chunks, and hosts for embedded attacks (`data/build_indic.py`) | Encyclopedic register only. |
+| Team-written Marathi and Hindi templates (`data/build_indic.py`) | ours | – | Form lines and attack templates, with disjoint template sets A (train) and B (eval) | indic_train, indic_eval | Small and template-based: 18 attack combinations per language in train and 8 in eval. Measures generalisation to new phrasing only loosely. |
 
 Attacks planted in both `docs_test*.json` files come from the neuralchemy **test** split only, so no planted attack was seen in training.
 
@@ -63,12 +65,16 @@ Attacks planted in both `docs_test*.json` files come from the neuralchemy **test
 | external_wambosec.parquet | 5,766 | 3,426 / 2,340 | `e844a24f9b48f5873aad1d1db6c9eab91d02c52a7174a1ef90281e87a3e117fa` |
 | docs_test.json (frozen) | 400 docs | 200 with a planted attack | `0e15b463af5ffed56a396a5934759a9d429a963cf52caeec2fcc9c90a8020787` |
 | docs_test_domain2.json (frozen) | 400 docs | 200 with a planted attack | `36c45413cebc4aa6ed7b45e8c0a4eb1edd58b2168d1a18f4c3912eb952d7a89b` |
+| indic_train.parquet (`python -m data.build_indic`) | 1,236 | 636 / 600 | `50301e295944caa730bfd9e5d77795ccd6b8f2b565ed294cc94c920a0eb92136` |
+| indic_eval.parquet (eval only, never trained or tuned on) | 496 | 256 / 240 | `35674d229d8a2537f0d6046dda23b9859c6672ebc6addaa9670bd742a4996d99` |
+
+`indic_eval` embeds English attacks from the **val** split, never test, so it doesn't touch the frozen sets. Rebuilt on a second machine (macOS) on 2026-10-12: all six frozen-build hashes matched.
 
 If your hash for a frozen file differs, you are evaluating the wrong file. Re-download it from the team drive instead of rebuilding. Wikipedia streaming order is stable, but the upstream data can change.
 
 ## Not tested
 
-- Non-English text
+- Non-English text beyond Marathi and Hindi; Marathi/Hindi coverage is the small template set in `indic_eval`
 - Images, and anything that needs OCR
 - Multi-turn attacks that spread across several messages
 - Attacks split across chunk boundaries

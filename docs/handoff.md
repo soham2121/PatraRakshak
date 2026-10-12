@@ -66,3 +66,10 @@ cd web && npm ci && npm run build  # FastAPI then serves the UI at /
 - **Selection rule with an explicit `max_fpr` grid** {0.05, 0.02, 0.01}. All three models ship at their 0.01 option. *If wrong:* change the rule in `SELECTION.md` and re-run validation only.
 - **`training_args.bin` dropped from `models/distilbert-v1/`.** It is a pickle and isn't needed to load the model. *If wrong:* nothing.
 - **UI shows scores to 4 decimals.** At 3 decimals, a score of 0.9962 against a threshold of 0.99632 displayed as equal but was not flagged.
+
+## Update from Person 1 (branch `p1-indic`, 2026-10-12)
+
+- **Task 13, second machine: done.** macOS check passed: checksums OK, 36 passed / 2 xfailed, `sample.pdf` flagged on page 2. Frozen-data rebuild hashes also matched on macOS (`docs/TESTING.md` ticked).
+- **Marathi/Hindi:** `distilbert-v1` flags 100% of Marathi/Hindi text, including plain application forms. `data/build_indic.py` adds `indic_train` / `indic_eval` (hashes in `data/LABELING.md`), and `train/finetune.py` takes `PR_EXTRA_TRAIN=indic_train`.
+- **`muril-v1` candidate:** trained on an RTX 3060 (642 s). It passes the selection rule on validation, has 0% FPR on Marathi/Hindi benign text, and meets the external FPR target (14.5%). It loses external recall (0.678) and is at 11.5% Wikipedia document FPR. Full comparison: `reports/SELECTION.md` addendum. Weights: GitHub Release `model-muril-v1`.
+- **Decision taken: `muril-v1` is now the shipped model** (GitHub Release `model-muril-v1`; `models.sha256`, README, MODEL_CARD and TESTING updated). `tests/test_edge_cases.py` keeps known failures per model version, so both models still test cleanly. `distilbert-v1` remains in Release `model-distilbert-v1`.
