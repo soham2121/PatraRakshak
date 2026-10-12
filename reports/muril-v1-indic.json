@@ -1,0 +1,25 @@
+{
+  "model_version": "muril-v1",
+  "threshold": 0.9819455742836,
+  "data/processed/indic_eval.parquet": {
+    "precision": 1.0,
+    "recall": 0.9648,
+    "f1": 0.9821,
+    "fpr": 0.0,
+    "confusion": {
+      "tn": 240,
+      "fp": 0,
+      "fn": 9,
+      "tp": 247
+    },
+    "n": 496,
+    "ms_per_text": 44.76,
+    "flag_rate_by_category": {
+      "benign_document": 0.0,
+      "benign_form": 0.0,
+      "english_attack_in_document": 0.992,
+      "native_attack": 0.688,
+      "native_attack_in_document": 0.975
+    }
+  }
+}

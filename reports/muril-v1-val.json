@@ -1,0 +1,68 @@
+{
+  "model_version": "muril-v1",
+  "threshold": 0.9819455742836,
+  "data/processed/val.parquet": {
+    "precision": 0.9912,
+    "recall": 0.9532,
+    "f1": 0.9718,
+    "fpr": 0.0096,
+    "confusion": {
+      "tn": 932,
+      "fp": 9,
+      "fn": 50,
+      "tp": 1018
+    },
+    "n": 2009,
+    "ms_per_text": 44.75,
+    "flag_rate_by_category": {
+      "adversarial": 1.0,
+      "agent_manipulation": 0.667,
+      "benign": 0.02,
+      "benign_document": 0.002,
+      "code_execution": 1.0,
+      "context_confusion": 1.0,
+      "control": 0.6,
+      "direct_injection": 0.962,
+      "edge_case": 0.0,
+      "encoding": 1.0,
+      "encoding_obfuscation": 1.0,
+      "indirect_document": 0.981,
+      "instruction_override": 1.0,
+      "jailbreak": 0.562,
+      "model_fingerprinting": 0.5,
+      "multi_turn": 0.667,
+      "payload_injection": 1.0,
+      "persona_replacement": 1.0,
+      "prompt_extraction": 1.0,
+      "prompt_injection": 1.0,
+      "rag_poisoning": 1.0,
+      "response_manipulation": 0.5,
+      "system_extraction": 1.0,
+      "system_manipulation": 1.0,
+      "token_smuggling": 1.0,
+      "training_extraction": 1.0
+    }
+  },
+  "evals/hard_negatives.jsonl": {
+    "precision": 0.5172,
+    "recall": 0.75,
+    "f1": 0.6122,
+    "fpr": 0.1867,
+    "confusion": {
+      "tn": 122,
+      "fp": 28,
+      "fn": 10,
+      "tp": 30
+    },
+    "n": 190,
+    "ms_per_text": 22.26,
+    "flag_rate_by_category": {
+      "human_instruction": 0.367,
+      "policy_document": 0.0,
+      "quoted_example_without_operative_instruction": 0.1,
+      "quoted_operative_instruction": 0.75,
+      "security_discussion": 0.067,
+      "technical_docs": 0.4
+    }
+  }
+}

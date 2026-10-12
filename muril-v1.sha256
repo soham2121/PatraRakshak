@@ -1,0 +1,5 @@
+4e9516939c59ae3bb3eae1a935ed028dafe243a54558eccb3bf571843a41b4d7  models/muril-v1/config.json
+6c86a8cb4dcabdb16b82c54694d5facf3403d1be0110285ce411a962592875f1  models/muril-v1/meta.json
+0d3d755b1f919dcf3c19718a5e39444f756312e7fed317dcbf9adc8af060bf96  models/muril-v1/model.safetensors
+a9a744fdd6a0788619337f5ce2447e70eb92c9efb30f8570ecac929069709816  models/muril-v1/tokenizer_config.json
+254290f300c381e77acf134a73cf641311c522e0397c7fda68b38c9545c33cb7  models/muril-v1/tokenizer.json
