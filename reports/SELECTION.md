@@ -57,10 +57,12 @@ Test-side numbers, run once for muril-v1. The frozen sets had already been used 
 | Hard-negatives FPR (val-side) | ≤ 20% | 16.0% ✅ | 18.7% ✅ |
 | `indic_eval` FPR (Marathi/Hindi benign) | – | **100%** | **0%** |
 | `indic_eval` recall (Marathi/Hindi attacks) | – | 100% (flags everything) | 96.5% |
-| ms per text (`test`) | – | 19.5 (laptop CPU) | 35.5 (RTX 3060 run, not comparable) |
+| ms per text (`test`, CPU) | – | 19.5 | 35.5 (a different PC's CPU, so not directly comparable) |
 
 `indic_eval` breakdown for muril-v1: `benign_document` 0%, `benign_form` 0% (this includes the Marathi/Hindi "ignore my previous application" lines), `english_attack_in_document` 99.2%, `native_attack_in_document` 97.5%, standalone `native_attack` with unseen template phrasing 68.8% (n = 16).
 
 Edge cases (`reports/muril-v1-edge-cases.json`): the benign Devanagari+emoji case and the zero-width attack now pass, but the attack hidden only in a DOCX comment scores 0.967, under the 0.982 threshold, and is missed.
 
 **Reading.** muril-v1 fixes the non-English false-positive problem and meets the external FPR target, but it loses external recall (mostly English social-engineering and obfuscation rows) and goes over the Wikipedia document FPR target. If Marathi/Hindi documents are in scope, which the Seva pitch says they are, muril-v1 is the only candidate that is usable on them. The Marathi/Hindi eval is small and template-based, so its numbers show the direction, not production accuracy.
+
+**Decision (2026-10-12): ship `muril-v1`.** The team switched the shipped model to `muril-v1` because the product targets Marathi/Hindi government forms, and `distilbert-v1` can't be used on them (100% FPR on `indic_eval`). The switch is also consistent with the rule's step 3 on validation (98.1% vs 97.9% `indirect_document` recall). The accepted costs are lower external recall (0.678) and a Wikipedia document FPR of 11.5%; both are listed as misses in the README. `distilbert-v1` stays available as GitHub Release `model-distilbert-v1`.

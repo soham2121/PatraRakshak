@@ -23,32 +23,34 @@ uvicorn patrarakshak.api:app         # http://localhost:8000; set PR_MODEL_DIR=m
 ## Get the trained model
 
 ```bash
-gh release download model-distilbert-v1 -R soham2121/PatraRakshak -p distilbert-v1.tar.gz
-tar -xzf distilbert-v1.tar.gz        # creates models/distilbert-v1/
-sha256sum -c models.sha256           # every line must say OK
-PR_MODEL_DIR=models/distilbert-v1 uvicorn patrarakshak.api:app
+gh release download model-muril-v1 -R soham2121/PatraRakshak -p muril-v1.tar.gz
+tar -xzf muril-v1.tar.gz             # creates models/muril-v1/
+sha256sum -c models.sha256           # every line must say OK (macOS: shasum -a 256 -c models.sha256)
+PR_MODEL_DIR=models/muril-v1 uvicorn patrarakshak.api:app
 ```
 
-Or with Docker: `docker build -t patrarakshak . && docker run -p 8000:8000 -v "$PWD/models/distilbert-v1:/models:ro" patrarakshak`.
+Or with Docker: `docker build -t patrarakshak . && docker run -p 8000:8000 -v "$PWD/models/muril-v1:/models:ro" patrarakshak`.
 
 ## Results
 
-Every model is evaluated at its threshold chosen on validation (`reports/SELECTION.md`), and each frozen test set was run once. Shipped model: **distilbert-v1**. Model details, error analysis and limitations are in [MODEL_CARD.md](MODEL_CARD.md).
+Every model is evaluated at its threshold chosen on validation (`reports/SELECTION.md`), and each frozen test set was run once. Shipped model: **muril-v1** (since 2026-10-12; previously distilbert-v1). It was switched because Marathi/Hindi forms are in scope; see the `reports/SELECTION.md` addendum. Model details, error analysis and limitations are in [MODEL_CARD.md](MODEL_CARD.md).
 
-| Metric (set) | Goal | tfidf-v1 | **distilbert-v1** | protectai-ref (reference) |
-|---|---|---|---|---|
-| In-distribution F1 (`test`) | report only | 0.888 | **0.959** | 0.877 |
-| External FPR (wambosec) | ≤ 15% | 2.2% ✅ | **39.4% ❌** | 0.5% ✅ |
-| External recall (wambosec) | ≥ 0.85 | 0.718 ❌ | **0.896 ✅** | 0.822 ❌ |
-| Document FPR (`docs_test`, Wikipedia) | ≤ 10% | 0.0% ✅ | **7.5% ✅** | 0.0% ✅ |
-| Document FPR (`docs_test_domain2`, bills) | ≤ 10% | 0.0% ✅ | **0.5% ✅** | 0.5% ✅ |
-| Document recall (`docs_test`) | ≥ 0.85 | 0.345 ❌ | **0.965 ✅** | 0.645 ❌ |
-| Document recall (`docs_test_domain2`) | ≥ 0.85 | 0.370 ❌ | **0.950 ✅** | 0.690 ❌ |
-| Span hit rate (`docs_test` / domain 2) | ≥ 0.80 | 0.345 / 0.370 ❌ | **0.965 / 0.950 ✅** | 0.645 / 0.690 ❌ |
-| Hard-negatives FPR | ≤ 20% | 10.7% ✅ | **16.0% ✅** | 12.7% ✅ |
-| ms per text (CPU, `test`) | – | 0.33 | 19.5 | 78.5 |
+| Metric (set) | Goal | tfidf-v1 | distilbert-v1 | **muril-v1** | protectai-ref (reference) |
+|---|---|---|---|---|---|
+| In-distribution F1 (`test`) | report only | 0.888 | 0.959 | **0.945** | 0.877 |
+| External FPR (wambosec) | ≤ 15% | 2.2% ✅ | 39.4% ❌ | **14.5% ✅** | 0.5% ✅ |
+| External recall (wambosec) | ≥ 0.85 | 0.718 ❌ | 0.896 ✅ | **0.678 ❌** | 0.822 ❌ |
+| Document FPR (`docs_test`, Wikipedia) | ≤ 10% | 0.0% ✅ | 7.5% ✅ | **11.5% ❌** | 0.0% ✅ |
+| Document FPR (`docs_test_domain2`, bills) | ≤ 10% | 0.0% ✅ | 0.5% ✅ | **1.5% ✅** | 0.5% ✅ |
+| Document recall (`docs_test`) | ≥ 0.85 | 0.345 ❌ | 0.965 ✅ | **0.985 ✅** | 0.645 ❌ |
+| Document recall (`docs_test_domain2`) | ≥ 0.85 | 0.370 ❌ | 0.950 ✅ | **0.970 ✅** | 0.690 ❌ |
+| Span hit rate (`docs_test` / domain 2) | ≥ 0.80 | 0.345 / 0.370 ❌ | 0.965 / 0.950 ✅ | **0.980 / 0.965 ✅** | 0.645 / 0.690 ❌ |
+| Hard-negatives FPR | ≤ 20% | 10.7% ✅ | 16.0% ✅ | **18.7% ✅** | 12.7% ✅ |
+| Marathi/Hindi benign FPR (`indic_eval`) | – | – | 100% | **0%** | – |
+| Marathi/Hindi recall (`indic_eval`) | – | – | 1.000 (flags everything) | **0.965** | – |
+| ms per text (CPU, `test`) | – | 0.33 | 19.5 | **35.5** (different PC) | 78.5 |
 
-The main miss is distilbert-v1's external FPR (39.4%). Most of those false positives are benign questions containing non-Latin scripts, escaped code points or encoding vocabulary. The model also flags benign non-English text in general. Both are covered in the model card.
+muril-v1's misses are external recall (0.678: mostly social-engineering and fiction-framed attacks) and Wikipedia document FPR (11.5%). In exchange it fixes the non-English false positives that drove distilbert-v1's 39.4% external FPR, and it is the only candidate usable on Marathi/Hindi forms. The frozen test sets were already used for the first three models, so muril-v1's test-side numbers are slightly optimistic. Details are in the model card.
 
 Sources: `reports/<model>-test.json`, `reports/<model>-docs.json`, `reports/<model>-docs-domain2.json`, `reports/<model>-val.json`.
 

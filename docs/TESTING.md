@@ -6,9 +6,9 @@ These steps need a person; they couldn't be done automatically. Tick each box in
 
 ```bash
 pip install -e ".[dev,transformer]"
-gh release download model-distilbert-v1 -R soham2121/PatraRakshak -p distilbert-v1.tar.gz && tar -xzf distilbert-v1.tar.gz
+gh release download model-muril-v1 -R soham2121/PatraRakshak -p muril-v1.tar.gz && tar -xzf muril-v1.tar.gz
 cd web && npm ci && npm run build && cd ..
-PR_MODEL_DIR=models/distilbert-v1 uvicorn patrarakshak.api:app
+PR_MODEL_DIR=models/muril-v1 uvicorn patrarakshak.api:app
 ```
 
 Open http://localhost:8000, put the mouse away, and use only the keyboard (Tab, Shift+Tab, Enter, Space).
@@ -31,17 +31,19 @@ Use a different computer from the one that trained the model, with a fresh virtu
 git clone https://github.com/soham2121/PatraRakshak.git && cd PatraRakshak
 python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -e ".[dev,transformer]"
-gh release download model-distilbert-v1 -R soham2121/PatraRakshak -p distilbert-v1.tar.gz
-tar -xzf distilbert-v1.tar.gz
+gh release download model-muril-v1 -R soham2121/PatraRakshak -p muril-v1.tar.gz
+tar -xzf muril-v1.tar.gz
 sha256sum -c models.sha256
-PR_TEST_MODEL_DIR=models/distilbert-v1 pytest -q
+PR_TEST_MODEL_DIR=models/muril-v1 pytest -q
 ```
 
 - [x] `sha256sum -c` prints `OK` for all five files.
 - [x] pytest shows `36 passed, 2 xfailed`. The two xfails are known model weaknesses (see `MODEL_CARD.md`).
 - [x] `PR_MODEL_DIR=models/distilbert-v1 uvicorn patrarakshak.api:app`, then scan `tests/fixtures/sample.pdf` in the UI. Expected: Suspicious, page 2.
 
-Done by Shantanu Puthran, 2026-10-12, on macOS (Apple silicon, Python 3.11). `shasum -a 256 -c models.sha256` gave OK for all five files. pytest: 36 passed, 2 xfailed. `sample.pdf` was scanned through the API (TestClient), not the browser UI: Suspicious, page 2.
+Done by Shantanu Puthran, 2026-10-12, on macOS (Apple silicon, Python 3.11). `shasum -a 256 -c models.sha256` gave OK for all five files. pytest: 36 passed, 2 xfailed. `sample.pdf` was scanned through the API (TestClient), not the browser UI: Suspicious, page 2. (That check was for distilbert-v1.)
+
+**muril-v1 (shipped since 2026-10-12):** it was trained on a Windows PC (RTX 3060) and checked on macOS, a different machine. The release asset was downloaded fresh and `shasum -a 256 -c` gave OK for all five files. `PR_TEST_MODEL_DIR=models/muril-v1 pytest -q` gave 37 passed, 1 xfailed (the known DOCX-comment miss). `sample.pdf` via the API: Suspicious, page 2. Shantanu Puthran, 2026-10-12.
 
 ## 3. Upload the frozen data to the team drive (Task 3, Step 4)
 
