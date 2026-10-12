@@ -1,0 +1,7 @@
+{
+  "model_version": "tfidf-v1",
+  "doc_recall": 0.345,
+  "doc_fpr": 0.0,
+  "span_hit_rate": 0.345,
+  "n": 400
+}

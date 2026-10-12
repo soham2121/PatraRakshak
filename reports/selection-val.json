@@ -1,0 +1,92 @@
+[
+ {
+  "model": "tfidf-v1",
+  "max_fpr": 0.05,
+  "threshold": 0.5209764919473601,
+  "val_fpr": 0.0499,
+  "val_recall": 0.8118,
+  "benign_document_fpr": 0.0318,
+  "indirect_document_recall": 0.661,
+  "hard_negatives_fpr": 0.7067
+ },
+ {
+  "model": "tfidf-v1",
+  "max_fpr": 0.02,
+  "threshold": 0.6588404174437871,
+  "val_fpr": 0.0191,
+  "val_recall": 0.6554,
+  "benign_document_fpr": 0.0019,
+  "indirect_document_recall": 0.4625,
+  "hard_negatives_fpr": 0.2667
+ },
+ {
+  "model": "tfidf-v1",
+  "max_fpr": 0.01,
+  "threshold": 0.7526638484088041,
+  "val_fpr": 0.0096,
+  "val_recall": 0.5646,
+  "benign_document_fpr": 0.0,
+  "indirect_document_recall": 0.339,
+  "hard_negatives_fpr": 0.1067
+ },
+ {
+  "model": "distilbert-v1",
+  "max_fpr": 0.05,
+  "threshold": 0.005961204878985883,
+  "val_fpr": 0.0499,
+  "val_recall": 0.9953,
+  "benign_document_fpr": 0.015,
+  "indirect_document_recall": 0.9963,
+  "hard_negatives_fpr": 0.6467
+ },
+ {
+  "model": "distilbert-v1",
+  "max_fpr": 0.02,
+  "threshold": 0.9416789412498475,
+  "val_fpr": 0.0191,
+  "val_recall": 0.9785,
+  "benign_document_fpr": 0.0019,
+  "indirect_document_recall": 0.9906,
+  "hard_negatives_fpr": 0.4333
+ },
+ {
+  "model": "distilbert-v1",
+  "max_fpr": 0.01,
+  "threshold": 0.996322274208069,
+  "val_fpr": 0.0096,
+  "val_recall": 0.956,
+  "benign_document_fpr": 0.0019,
+  "indirect_document_recall": 0.9794,
+  "hard_negatives_fpr": 0.16
+ },
+ {
+  "model": "protectai-v2-reference",
+  "max_fpr": 0.05,
+  "threshold": 0.0010001566261053087,
+  "val_fpr": 0.0499,
+  "val_recall": 0.8801,
+  "benign_document_fpr": 0.0487,
+  "indirect_document_recall": 0.8146,
+  "hard_negatives_fpr": 0.36
+ },
+ {
+  "model": "protectai-v2-reference",
+  "max_fpr": 0.02,
+  "threshold": 0.03591167181730271,
+  "val_fpr": 0.0191,
+  "val_recall": 0.8006,
+  "benign_document_fpr": 0.0056,
+  "indirect_document_recall": 0.7172,
+  "hard_negatives_fpr": 0.2867
+ },
+ {
+  "model": "protectai-v2-reference",
+  "max_fpr": 0.01,
+  "threshold": 0.9972278475761415,
+  "val_fpr": 0.0096,
+  "val_recall": 0.6845,
+  "benign_document_fpr": 0.0,
+  "indirect_document_recall": 0.6049,
+  "hard_negatives_fpr": 0.1267
+ }
+]

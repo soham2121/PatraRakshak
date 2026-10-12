@@ -1,0 +1,7 @@
+{
+  "model_version": "protectai-v2-reference",
+  "doc_recall": 0.69,
+  "doc_fpr": 0.005,
+  "span_hit_rate": 0.69,
+  "n": 400
+}

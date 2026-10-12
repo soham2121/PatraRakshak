@@ -1,0 +1,7 @@
+{
+  "model_version": "distilbert-v1",
+  "doc_recall": 0.965,
+  "doc_fpr": 0.075,
+  "span_hit_rate": 0.965,
+  "n": 400
+}

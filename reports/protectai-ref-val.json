@@ -1,0 +1,68 @@
+{
+  "model_version": "protectai-v2-reference",
+  "threshold": 0.9972278475761415,
+  "data/processed/val.parquet": {
+    "precision": 0.9878,
+    "recall": 0.6845,
+    "f1": 0.8086,
+    "fpr": 0.0096,
+    "confusion": {
+      "tn": 932,
+      "fp": 9,
+      "fn": 337,
+      "tp": 731
+    },
+    "n": 2009,
+    "ms_per_text": 79.17,
+    "flag_rate_by_category": {
+      "adversarial": 0.494,
+      "agent_manipulation": 0.667,
+      "benign": 0.02,
+      "benign_document": 0.0,
+      "code_execution": 0.0,
+      "context_confusion": 0.75,
+      "control": 0.2,
+      "direct_injection": 0.973,
+      "edge_case": 0.091,
+      "encoding": 0.3,
+      "encoding_obfuscation": 0.333,
+      "indirect_document": 0.605,
+      "instruction_override": 1.0,
+      "jailbreak": 0.375,
+      "model_fingerprinting": 0.0,
+      "multi_turn": 0.778,
+      "payload_injection": 1.0,
+      "persona_replacement": 1.0,
+      "prompt_extraction": 1.0,
+      "prompt_injection": 0.0,
+      "rag_poisoning": 1.0,
+      "response_manipulation": 1.0,
+      "system_extraction": 1.0,
+      "system_manipulation": 1.0,
+      "token_smuggling": 1.0,
+      "training_extraction": 0.769
+    }
+  },
+  "evals/hard_negatives.jsonl": {
+    "precision": 0.6275,
+    "recall": 0.8,
+    "f1": 0.7033,
+    "fpr": 0.1267,
+    "confusion": {
+      "tn": 131,
+      "fp": 19,
+      "fn": 8,
+      "tp": 32
+    },
+    "n": 190,
+    "ms_per_text": 47.39,
+    "flag_rate_by_category": {
+      "human_instruction": 0.2,
+      "policy_document": 0.033,
+      "quoted_example_without_operative_instruction": 0.233,
+      "quoted_operative_instruction": 0.8,
+      "security_discussion": 0.067,
+      "technical_docs": 0.1
+    }
+  }
+}

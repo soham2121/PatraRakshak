@@ -1,4 +1,4 @@
-# Handoff: state as of 2026-10-12
+# Handoff: state as of 2026-10-12 (updated after Tasks 8, 10–12)
 
 Plan: `docs/superpowers/plans/2026-10-12-patrarakshak.md`. Person 1's brief: `docs/person-1.md`.
 
@@ -15,22 +15,20 @@ Plan: `docs/superpowers/plans/2026-10-12-patrarakshak.md`. Person 1's brief: `do
 | 6 | P3 | `POST /api/v1/scan` in `patrarakshak/api.py` | `tests/test_api.py`; curl against a running server |
 | 7 | P3 | React UI in `web/`; CI now builds it | `npm run build`; built UI served by FastAPI |
 
-Whole suite: **31 passed**, and `npm run build` passes.
+| 8 | P1 | `train/baseline.py`; `models/tfidf-v1` trained locally; `reports/tfidf-v1-dev.json` | data hashes match `LABELING.md` |
+| 10 | P1 | `train/finetune.py`, `train/reference.py`; `distilbert-v1` trained (92 s, RTX 5070 Ti); `protectai-ref` thresholded on val | `reports/finetune-runs.md`, `reports/latency.md` |
+| 11 | P3 | Docker image builds (2.0 GB) and serves the UI; with `distilbert-v1` mounted, `sample.pdf` → Suspicious, page 2 | `docker build`, `docker run` |
+| 12 | all | `reports/SELECTION.md` (rule written first), `evals/select.py`, val/test/docs reports, README results table, `evals/edge_cases.py` + `tests/test_edge_cases.py` | frozen test sets run once per model |
+
+Whole suite: **31 passed, 1 skipped** (the skip is the real-model edge-case test). With `PR_TEST_MODEL_DIR=models/distilbert-v1`: 36 passed, 2 xfailed (known failures, see `MODEL_CARD.md`). `npm run build` passes.
 
 ## Not finished
 
-1. **Task 11 (Docker): written, not verified.** `Dockerfile` and `.dockerignore` are committed, but `docker build` was never run. Next steps:
-   - Run `docker build -t patrarakshak .`.
-   - Run `docker run -p 8000:8000 -e PR_MODEL_DIR= patrarakshak`. The empty `PR_MODEL_DIR` uses the mock until `models/tfidf-v1` exists.
-   - Scan `tests/fixtures/sample.pdf`. Expected: Suspicious, page 2.
-   - Once Person 1 has a model, run it with `-v "$PWD/models/tfidf-v1:/models:ro"` instead.
-2. **Frozen data upload (Task 3, Step 4).** Copy `data/processed/test.parquet`, `docs_test.json` and `docs_test_domain2.json` to the team's shared drive. Their hashes are in `data/LABELING.md`. Anyone who rebuilds should compare hashes and use the drive copy if theirs differ.
-3. **UI keyboard check (Task 7).** No browser was available here, so tab through the page once by hand:
-   - Every control should be reachable and labelled.
-   - Run `uvicorn patrarakshak.api:app` and `cd web && npm run dev`.
-4. **Whole-branch review.** Nobody has reviewed Tasks 3–7, 9 and 11 yet. Do this before Task 12.
-5. **Person 1's work.** Tasks 8 and 10 are unblocked; see `docs/person-1.md`.
-6. **Joint tasks.** Tasks 12 (selection) and 13 (release) need Person 1's models first.
+1. **Model upload (Task 13).** `models/distilbert-v1/` is local only. Upload it as a GitHub Release asset or to a Hugging Face repo, then load it on a second machine and run `sha256sum -c models.sha256`.
+2. **Frozen data upload (Task 3, Step 4).** Copy `data/processed/test.parquet`, `docs_test.json` and `docs_test_domain2.json` to the team drive. A rebuild on 2026-10-12 reproduced all six hashes exactly.
+3. **UI keyboard check (Task 7).** It is still not done by hand; the browser extension was not connected. All controls are native, labelled elements, so it should pass.
+4. **Whole-branch review** of Tasks 3–12, by a person.
+5. **Known model weaknesses** (`MODEL_CARD.md`): non-English text is flagged, the external FPR is 39% (target ≤ 15%), and HTML entities are not decoded. Next candidates are MuRIL with benign non-English data, and `html.unescape` in `normalize` (that needs a retrain).
 
 ## Decisions taken that deviate from the plan
 
@@ -47,7 +45,6 @@ Each line shows the decision, followed by the cost if it's wrong.
 
 ## Small things noticed, not fixed
 
-- `web/README.md` is still the Vite template README.
 - CI uses Node 20; Vite 8 needs Node ≥ 20.19, which `setup-node@v4` with `20` currently resolves to.
 
 ## How to run
@@ -59,3 +56,11 @@ pytest -q
 uvicorn patrarakshak.api:app       # mock model unless PR_MODEL_DIR is set
 cd web && npm ci && npm run build  # FastAPI then serves the UI at /
 ```
+
+## Decisions taken in Tasks 8–12
+
+- **Training hardware.** Everything trained on a local RTX 5070 Ti (CUDA 12.8 torch), not Kaggle or Colab. *If wrong:* nothing; the scripts are unchanged.
+- **Thresholds come from scan-level scores.** `evals/select.py` scores validation through `detector.scan`, the same path the evaluator and the app use, not raw text. *If wrong:* thresholds move slightly.
+- **Selection rule with an explicit `max_fpr` grid** {0.05, 0.02, 0.01}. All three models ship at their 0.01 option. *If wrong:* change the rule in `SELECTION.md` and re-run validation only.
+- **`training_args.bin` dropped from `models/distilbert-v1/`.** It is a pickle and isn't needed to load the model. *If wrong:* nothing.
+- **UI shows scores to 4 decimals.** At 3 decimals, a score of 0.9962 against a threshold of 0.99632 displayed as equal but was not flagged.
