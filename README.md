@@ -52,6 +52,6 @@ The main miss is distilbert-v1's external FPR (39.4%). Most of those false posit
 
 Sources: `reports/<model>-test.json`, `reports/<model>-docs.json`, `reports/<model>-docs-domain2.json`, `reports/<model>-val.json`.
 
-Label policy and data sources: [data/LABELING.md](data/LABELING.md). Current status: [docs/handoff.md](docs/handoff.md).
+Label policy and data sources: [data/LABELING.md](data/LABELING.md). Current status: [docs/handoff.md](docs/handoff.md). Manual checks still to do: [docs/TESTING.md](docs/TESTING.md).
 
 Implementation plan: [docs/superpowers/plans/2026-10-12-patrarakshak.md](docs/superpowers/plans/2026-10-12-patrarakshak.md)
