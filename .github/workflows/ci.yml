@@ -9,7 +9,6 @@ jobs:
         with: { python-version: "3.11" }
       - run: pip install -e ".[dev]"
       - run: pytest -q
-      # Uncomment once web/ exists (Task 7).
-      # - uses: actions/setup-node@v4
-      #   with: { node-version: 20 }
-      # - run: cd web && npm ci && npm run build
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - run: cd web && npm ci && npm run build
