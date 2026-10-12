@@ -10,7 +10,7 @@ export function Results({ result }: { result: ScanResult }) {
     <section>
       <h2>{result.label === "suspicious" ? "Suspicious content found" : "Nothing flagged"}</h2>
       <p>
-        Score {result.score.toFixed(3)} (flag threshold {result.threshold.toFixed(3)}) · model {result.model_version} ·{" "}
+        Score {result.score.toFixed(4)} (flag threshold {result.threshold.toFixed(4)}) · model {result.model_version} ·{" "}
         {result.chunks_scanned} chunks scanned
         {result.truncated && " · only the first 100,000 characters were scanned"}
       </p>
@@ -22,7 +22,7 @@ export function Results({ result }: { result: ScanResult }) {
         {result.segments.map((s) => (
           <li key={s.start}>
             <blockquote>{s.text}</blockquote>
-            <small>score {s.score.toFixed(3)}{s.page !== null && ` · page ${s.page}`}</small>
+            <small>score {s.score.toFixed(4)}{s.page !== null && ` · page ${s.page}`}</small>
           </li>
         ))}
       </ol>
