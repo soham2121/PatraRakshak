@@ -1,0 +1,25 @@
+{
+  "model_version": "distilbert-v1",
+  "threshold": 0.996322274208069,
+  "data/processed/indic_eval.parquet": {
+    "precision": 0.5161,
+    "recall": 1.0,
+    "f1": 0.6809,
+    "fpr": 1.0,
+    "confusion": {
+      "tn": 0,
+      "fp": 240,
+      "fn": 0,
+      "tp": 256
+    },
+    "n": 496,
+    "ms_per_text": 19.94,
+    "flag_rate_by_category": {
+      "benign_document": 1.0,
+      "benign_form": 1.0,
+      "english_attack_in_document": 1.0,
+      "native_attack": 1.0,
+      "native_attack_in_document": 1.0
+    }
+  }
+}

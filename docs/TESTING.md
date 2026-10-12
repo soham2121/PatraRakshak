@@ -51,7 +51,7 @@ python -m data.build          # a few minutes
 sha256sum data/processed/*
 ```
 
-- [ ] Every hash matches the table in `data/LABELING.md`. The build on 2026-10-12 reproduced all six exactly.
+- [x] Every hash matches the table in `data/LABELING.md`. The build on 2026-10-12 reproduced all six exactly. Reproduced again on macOS by Shantanu Puthran, 2026-10-12.
 - [ ] Copy `test.parquet`, `docs_test.json` and `docs_test_domain2.json` to the team drive.
 - [ ] Put the drive link here: ______
 
