@@ -22,7 +22,7 @@ from patrarakshak.text import normalize
 BASE = sys.argv[2] if len(sys.argv) > 2 else "distilbert-base-uncased"
 SEED, MAX_FPR = 42, 0.05
 SMOKE = int(os.getenv("PR_SMOKE", "0"))
-EXTRA = [e for e in os.getenv("PR_EXTRA_TRAIN", "").split(",") if e]
+EXTRA = [e.strip() for e in os.getenv("PR_EXTRA_TRAIN", "").split(",") if e.strip()]  # Windows `set X=a && ...` keeps the space
 HP = {"lr": 2e-5, "batch": 16, "epochs": 1 if SMOKE else 3, "max_length": 256}
 DATA = Path("data/processed")
 out = Path(sys.argv[1])
