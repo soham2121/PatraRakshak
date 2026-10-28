@@ -26,11 +26,12 @@ Whole suite: **31 passed, 1 skipped** (the skip is the real-model edge-case test
 
 Step-by-step checklist for everything below: [docs/TESTING.md](TESTING.md).
 
-1. **Model upload (Task 13): done.** GitHub Release `model-distilbert-v1`. A fresh clone, download and `sha256sum -c` passed on the release machine. Still to do: load it on a second machine.
+1. **Model upload (Task 13): done.** Releases `model-distilbert-v1` and `model-muril-v1`, both checked on a second machine (see the 2026-10-12 update below).
 2. **Frozen data upload (Task 3, Step 4).** Copy `data/processed/test.parquet`, `docs_test.json` and `docs_test_domain2.json` to the team drive. A rebuild on 2026-10-12 reproduced all six hashes exactly.
-3. **UI keyboard check (Task 7).** It is still not done by hand; the browser extension was not connected. All controls are native, labelled elements, so it should pass.
-4. **Whole-branch review** of Tasks 3–12, by a person.
-5. **Known model weaknesses** (`MODEL_CARD.md`): non-English text is flagged, the external FPR is 39% (target ≤ 15%), and HTML entities are not decoded. Next candidates are MuRIL with benign non-English data, and `html.unescape` in `normalize` (that needs a retrain).
+3. **UI keyboard check (Task 7).** Not done by hand, and the UI was restyled on 2026-10-28, so use the updated checklist in `TESTING.md` §1. All controls are native, labelled elements.
+4. **Whole-branch review** of Tasks 3–12, by a person, plus the 2026-10-28 changes below.
+5. **Known model weaknesses of muril-v1** (`MODEL_CARD.md`): external recall 0.678 (target ≥ 0.85), mostly social-engineering and fiction-framed attacks; attacks quoted inside explanatory prose are often missed; non-English text other than Marathi/Hindi is unreliable; HTML entities are not decoded (`html.unescape` in `normalize` needs a retrain). Marathi/Hindi false positives and the 39% external FPR were fixed by muril-v1.
+6. **Marathi/Hindi UI strings** (`web/src/i18n.ts`) need review by a native speaker.
 
 ## Decisions taken that deviate from the plan
 
@@ -73,3 +74,12 @@ cd web && npm ci && npm run build  # FastAPI then serves the UI at /
 - **Marathi/Hindi:** `distilbert-v1` flags 100% of Marathi/Hindi text, including plain application forms. `data/build_indic.py` adds `indic_train` / `indic_eval` (hashes in `data/LABELING.md`), and `train/finetune.py` takes `PR_EXTRA_TRAIN=indic_train`.
 - **`muril-v1` candidate:** trained on an RTX 3060 (642 s). It passes the selection rule on validation, has 0% FPR on Marathi/Hindi benign text, and meets the external FPR target (14.5%). It loses external recall (0.678) and is at 11.5% Wikipedia document FPR. Full comparison: `reports/SELECTION.md` addendum. Weights: GitHub Release `model-muril-v1`.
 - **Decision taken: `muril-v1` is now the shipped model** (GitHub Release `model-muril-v1`; `models.sha256`, README, MODEL_CARD and TESTING updated). `tests/test_edge_cases.py` keeps known failures per model version, so both models still test cleanly. `distilbert-v1` remains in Release `model-distilbert-v1`.
+
+## Update 2026-10-28
+
+- **UI restyled** as a lab-style screening report (teal letterhead, result table with value / reference / H flag, flagged-passage table), with an EN / मराठी / हिंदी switch. New: `web/src/app.css`, `web/src/i18n.ts`, font package `@fontsource/mukta`. Design records: `PRODUCT.md`, `DESIGN.md`, `.impeccable/`. Checked in headless Chrome at 1440 and 390 px with real muril-v1 scans; keyboard check still open.
+- **Long-document misses investigated.** Hand-written reconstructions of the manual tests are in `tests/fixtures/longdocs/`. The pipeline was checked end to end (character windows of ≤ 512 chars at 44–104 tokens, so no truncation; batch and single scores agree to 1e-6; decision is `max >= threshold`; API equals detector). Cause: model scores, not code. A social-engineering attack's window scored 0.864 while benign advice in the same guide scored 0.934, so no threshold separates them; an attack quoted inside explanatory prose scores ~0.03–0.23 while the bare quote scores 0.993.
+- **Tests:** deterministic chunking and decision tests in `tests/test_text.py` and `tests/test_detector.py`; real-model long-document cases in `tests/test_longdocs.py` (skipped without `PR_TEST_MODEL_DIR`, known muril-v1 misses as strict xfails). Whole suite: 39 passed, 3 skipped. With `PR_TEST_MODEL_DIR=models/muril-v1`: `test_longdocs.py` + `test_edge_cases.py` give 12 passed, 7 xfailed.
+- **Chunking fix:** a sentence over 512 chars is now hard-split into pieces overlapping by 128 chars (`HARD_SPLIT_OVERLAP` in `patrarakshak/text.py`), so a phrase across a cut is scored whole. muril-v1's validation selection numbers did not change.
+- **Diagnostic tool:** `PR_MODEL_DIR=models/muril-v1 python -m evals.chunk_report FILE ...` prints every window's span, token count and score.
+- **muril-v2 tried and rejected.** `data/build_hard.py` (social-engineering and quoted-in-prose attacks, dolly-15k procedural benign text; hashes in `data/LABELING.md`). Big recall gains on `hard_eval`, but hard-negatives FPR 39.3% (limit 20%), so it fails the selection rule. Details: `reports/SELECTION.md` addendum. Frozen test sets were not run for it. Weights were deleted, never released. **muril-v1 remains the shipped model.**
