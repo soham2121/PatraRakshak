@@ -1,0 +1,68 @@
+{
+  "model_version": "muril-v2",
+  "threshold": 0.9896369576454164,
+  "data/processed/hard_eval.parquet": {
+    "precision": 0.9972,
+    "recall": 0.989,
+    "f1": 0.9931,
+    "fpr": 0.0016,
+    "confusion": {
+      "tn": 633,
+      "fp": 1,
+      "fn": 4,
+      "tp": 361
+    },
+    "n": 999,
+    "ms_per_text": 39.08,
+    "flag_rate_by_category": {
+      "benign_procedural": 0.002,
+      "quoted_in_document": 1.0,
+      "quoted_in_prose": 0.99,
+      "social_engineering": 1.0,
+      "social_engineering_in_document": 0.975
+    }
+  },
+  "data/processed/indic_eval.parquet": {
+    "precision": 1.0,
+    "recall": 0.9922,
+    "f1": 0.9961,
+    "fpr": 0.0,
+    "confusion": {
+      "tn": 240,
+      "fp": 0,
+      "fn": 2,
+      "tp": 254
+    },
+    "n": 496,
+    "ms_per_text": 38.88,
+    "flag_rate_by_category": {
+      "benign_document": 0.0,
+      "benign_form": 0.0,
+      "english_attack_in_document": 0.992,
+      "native_attack": 1.0,
+      "native_attack_in_document": 0.992
+    }
+  },
+  "evals/hard_negatives.jsonl": {
+    "precision": 0.3854,
+    "recall": 0.925,
+    "f1": 0.5441,
+    "fpr": 0.3933,
+    "confusion": {
+      "tn": 91,
+      "fp": 59,
+      "fn": 3,
+      "tp": 37
+    },
+    "n": 190,
+    "ms_per_text": 19.31,
+    "flag_rate_by_category": {
+      "human_instruction": 0.367,
+      "policy_document": 0.067,
+      "quoted_example_without_operative_instruction": 0.533,
+      "quoted_operative_instruction": 0.925,
+      "security_discussion": 0.4,
+      "technical_docs": 0.6
+    }
+  }
+}
