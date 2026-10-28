@@ -30,7 +30,8 @@ Step-by-step checklist for everything below: [docs/TESTING.md](TESTING.md).
 2. **Frozen data upload (Task 3, Step 4).** Copy `data/processed/test.parquet`, `docs_test.json` and `docs_test_domain2.json` to the team drive. A rebuild on 2026-10-12 reproduced all six hashes exactly.
 3. **UI keyboard check (Task 7).** Not done by hand, and the UI was restyled on 2026-10-28, so use the updated checklist in `TESTING.md` §1. All controls are native, labelled elements.
 4. **Whole-branch review** of Tasks 3–12, by a person, plus the 2026-10-28 changes below.
-5. **Known model weaknesses of muril-v1** (`MODEL_CARD.md`): external recall 0.678 (target ≥ 0.85), mostly social-engineering and fiction-framed attacks; attacks quoted inside explanatory prose are often missed; non-English text other than Marathi/Hindi is unreliable; HTML entities are not decoded (`html.unescape` in `normalize` needs a retrain). Marathi/Hindi false positives and the 39% external FPR were fixed by muril-v1.
+5. **Known model weaknesses of muril-ens** (`MODEL_CARD.md`): external recall 0.656 (target ≥ 0.85), mostly social-engineering and fiction-framed attacks; attacks quoted inside explanatory prose are often missed; 38% of harmless BIPIA long documents and 11.0% of Wikipedia documents are flagged; non-English text other than Marathi/Hindi is unreliable; HTML entities are not decoded (`html.unescape` in `normalize` needs a retrain).
+7. **Second-machine check of muril-ens** (`TESTING.md` §2) and **Azure deployment** (container with at least 4 GB of RAM, `models/` mounted, `PR_MODEL_DIR=/models/muril-ens`).
 6. **Marathi/Hindi UI strings** (`web/src/i18n.ts`) need review by a native speaker.
 
 ## Decisions taken that deviate from the plan
@@ -83,3 +84,11 @@ cd web && npm ci && npm run build  # FastAPI then serves the UI at /
 - **Chunking fix:** a sentence over 512 chars is now hard-split into pieces overlapping by 128 chars (`HARD_SPLIT_OVERLAP` in `patrarakshak/text.py`), so a phrase across a cut is scored whole. muril-v1's validation selection numbers did not change.
 - **Diagnostic tool:** `PR_MODEL_DIR=models/muril-v1 python -m evals.chunk_report FILE ...` prints every window's span, token count and score.
 - **muril-v2 tried and rejected.** `data/build_hard.py` (social-engineering and quoted-in-prose attacks, dolly-15k procedural benign text; hashes in `data/LABELING.md`). Big recall gains on `hard_eval`, but hard-negatives FPR 39.3% (limit 20%), so it fails the selection rule. Details: `reports/SELECTION.md` addendum. Frozen test sets were not run for it. Weights were deleted, never released. **muril-v1 remains the shipped model.**
+
+## Update 2026-10-28 (later): shipped model is now muril-ens
+
+- **New data:** `data/build_extra.py` builds `agentic_train` / `agentic_eval` (3nesdeniz/agentic-prompt-injection-5k) and `bipia_eval` (1,000 whole BIPIA documents, eval only). Hashes in `data/LABELING.md`. The BIPIA dataset is gated: log in with `.venv/Scripts/hf.exe auth login` and accept its terms before rebuilding.
+- **muril-v3** (train + indic_train + agentic_train) passed the rule's limits but lost step 3 to muril-v1. **muril-ens**, the per-window mean of muril-v1 and muril-v3 (`"kind": "ensemble"` in `detector.load`), won step 3 and is the shipped model. External FPR 4.0% (was 14.5%), external recall 0.656 (was 0.678). Full numbers: `reports/SELECTION.md` addendum, README, `MODEL_CARD.md`.
+- **Release:** `model-muril-ens` holds `muril-ens.tar.gz` (models/muril-v3/ and models/muril-ens/); muril-v1 stays in `model-muril-v1`. `models.sha256` lists all eleven files.
+- **Docker:** the image now defaults to `PR_MODEL_DIR=/models/muril-ens`; mount the whole `models/` directory. Give it at least 4 GB of RAM.
+- **Tests:** muril-ens passes every edge case (including the DOCX comment that muril-v1 missed) and has the same six known long-document misses as muril-v1, recorded as strict xfails in `tests/test_longdocs.py`.

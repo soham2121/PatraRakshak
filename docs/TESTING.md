@@ -6,9 +6,10 @@ These steps need a person; they couldn't be done automatically. Tick each box in
 
 ```bash
 pip install -e ".[dev,transformer]"
-gh release download model-muril-v1 -R soham2121/PatraRakshak -p muril-v1.tar.gz && tar -xzf muril-v1.tar.gz
+gh release download model-muril-v1 -R soham2121/PatraRakshak -p muril-v1.tar.gz && tar -xzf muril-v1.tar.gz   # Git Bash on Windows: tar --force-local -xzf ...
+gh release download model-muril-ens -R soham2121/PatraRakshak -p muril-ens.tar.gz && tar -xzf muril-ens.tar.gz
 cd web && npm ci && npm run build && cd ..
-PR_MODEL_DIR=models/muril-v1 uvicorn patrarakshak.api:app
+PR_MODEL_DIR=models/muril-ens uvicorn patrarakshak.api:app
 ```
 
 Open http://localhost:8000, put the mouse away, and use only the keyboard (Tab, Shift+Tab, Enter, Space).
@@ -44,7 +45,13 @@ PR_TEST_MODEL_DIR=models/muril-v1 pytest -q
 
 Done by Shantanu Puthran, 2026-10-12, on macOS (Apple silicon, Python 3.11). `shasum -a 256 -c models.sha256` gave OK for all five files. pytest: 36 passed, 2 xfailed. `sample.pdf` was scanned through the API (TestClient), not the browser UI: Suspicious, page 2. (That check was for distilbert-v1.)
 
-**muril-v1 (shipped since 2026-10-12):** it was trained on a Windows PC (RTX 3060) and checked on macOS, a different machine. The release asset was downloaded fresh and `shasum -a 256 -c` gave OK for all five files. `PR_TEST_MODEL_DIR=models/muril-v1 pytest -q` gave 37 passed, 1 xfailed (the known DOCX-comment miss). `sample.pdf` via the API: Suspicious, page 2. Shantanu Puthran, 2026-10-12.
+**muril-v1 (shipped 2026-10-12 to 2026-10-28, now a member of muril-ens):** it was trained on a Windows PC (RTX 3060) and checked on macOS, a different machine. The release asset was downloaded fresh and `shasum -a 256 -c` gave OK for all five files. `PR_TEST_MODEL_DIR=models/muril-v1 pytest -q` gave 37 passed, 1 xfailed (the known DOCX-comment miss). `sample.pdf` via the API: Suspicious, page 2. Shantanu Puthran, 2026-10-12.
+
+**muril-ens (shipped since 2026-10-28):** still to check on a second machine.
+
+- [ ] Download both `model-muril-v1` and `model-muril-ens`, extract both, and `sha256sum -c models.sha256` prints `OK` for all eleven files.
+- [ ] `PR_TEST_MODEL_DIR=models/muril-ens pytest -q` gives 0 failures (6 xfails in `tests/test_longdocs.py` are known misses).
+- [ ] `PR_MODEL_DIR=models/muril-ens uvicorn patrarakshak.api:app`, then scan `tests/fixtures/sample.pdf` in the UI. Expected: Suspicious, page 2, model `muril-ens`.
 
 ## 3. Upload the frozen data to the team drive (Task 3, Step 4)
 

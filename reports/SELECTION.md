@@ -94,3 +94,28 @@ What it gained and what it cost, at each model's 0.01 option (`reports/muril-v2-
 | Hard negatives: technical docs (FPR) | 40.0% | 60.0% |
 
 Reading: training on quoted-in-prose attacks taught the model that quoting or discussing instructions is itself suspicious. `hard_eval` gains are also partly template recall: on the hand-written long-document fixtures muril-v2 still misses all three social-engineering passages, while it does catch the quoted attack in the cybersecurity article and no longer flags the admissions guide. A next candidate needs benign training text that discusses and quotes attacks without containing one. The muril-v2 weights were deleted and never released; rebuild with `python -m data.build_hard` and `PR_EXTRA_TRAIN=indic_train,hard_train python -m train.finetune models/muril-v2 google/muril-base-cased`.
+
+## Addendum: `muril-v3` and `muril-ens` (2026-10-28), muril-ens selected
+
+`muril-v3` is `google/muril-base-cased` fine-tuned on `train` + `indic_train` + `agentic_train` (`data/build_extra.py`; 3nesdeniz/agentic-prompt-injection-5k `train` split), same hyperparameters, 298 s on an RTX 5070 Ti. `muril-ens` is no new training: the per-window mean of muril-v1 and muril-v3 scores (`"kind": "ensemble"` in `patrarakshak/detector.py`). All three were judged by the unchanged rule on validation only (`reports/muril-v3-selection-val.json`, `reports/muril-ens-selection-val.json`, `reports/muril-ens-val.json`):
+
+| Option | Threshold | Val `benign_document` FPR | Hard-negatives FPR | Val `indirect_document` recall | Passes step 2? |
+|---|---|---|---|---|---|
+| muril-v1 @ 0.01 | 0.9819 | 0.2% | 18.7% | 98.13% | yes |
+| muril-v3 @ 0.05 / 0.02 | 0.003 / 0.868 | 2.1% / 0.4% | 30.7% / 21.3% | 99.8% / 99.4% | no (hard negatives) |
+| muril-v3 @ 0.01 | 0.9924 | 0.2% | 18.0% | 97.94% | yes |
+| muril-ens @ 0.05 / 0.02 | 0.006 / 0.633 | 1.5% / 0.2% | 87.3% / 22.7% | 99.8% / 99.3% | no (hard negatives) |
+| **muril-ens @ 0.01** | **0.9783** | **0.2%** | **17.3%** | **98.69%** | **yes, selected** |
+
+By step 3, **muril-ens @ 0.01 is selected** (highest `indirect_document` recall among passing options) and becomes the shipped model. The margins are small (about three documents of recall and two hard-negative lines over muril-v1). It costs twice the memory and CPU of muril-v1, which matters for the Azure deployment.
+
+Other validation-side sets, each model at its 0.01 option:
+
+| Set | muril-v1 | muril-v3 | muril-ens |
+|---|---|---|---|
+| `agentic_eval` recall / FPR | 45.5% / 12.0% | 91.9% / 7.5% | 78.3% / 8.2% |
+| `bipia_eval` recall / FPR (1,000 whole documents) | 76.4% / 32.4% | 86.0% / 41.2% | 83.4% / 38.0% |
+| `hard_eval` recall / FPR | 87.1% / 1.1% | 80.0% / 1.9% | 81.4% / 1.3% |
+| `indic_eval` recall / FPR | 96.5% / 0% | 98.4% / 0.4% | 98.4% / 0% |
+
+Test-side numbers, run once for muril-ens (frozen sets already used by five models, so optimistic): in-distribution F1 0.951; external FPR **4.0%** (muril-v1 14.5%) and recall 0.656 (0.678); documents recall 0.990 / 0.955 and FPR 11.0% / 3.0% (Wikipedia / bills). The frozen sets were not run for muril-v3 alone. Weights: Release `model-muril-ens` (muril-v3 and the ensemble config) alongside `model-muril-v1`.
