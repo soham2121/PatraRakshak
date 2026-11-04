@@ -3,6 +3,10 @@ export const LANGS = { en: "EN", mr: "मराठी", hi: "हिंदी" } 
 export type Lang = keyof typeof LANGS;
 
 const en = {
+  challenge: "Our entry for the Seva First Innovation Challenge",
+  zone: "Maharashtra Zone",
+  bannerAlt: "Seva First Innovation Challenge, Maharashtra Zone",
+  madeFor: "Made in Maharashtra, for India.",
   tagline: "Flags passages that look like prompt-injection attempts.",
   disclaimer: "It is a detector, not a guarantee.",
   language: "Language",
@@ -47,6 +51,10 @@ const en = {
 export type Strings = typeof en;
 
 const mr: Strings = {
+  challenge: "सेवा फर्स्ट इनोव्हेशन चॅलेंजसाठी आमची प्रवेशिका",
+  zone: "महाराष्ट्र विभाग",
+  bannerAlt: "सेवा फर्स्ट इनोव्हेशन चॅलेंज, महाराष्ट्र विभाग",
+  madeFor: "महाराष्ट्रात घडवले, भारतासाठी.",
   tagline: "प्रॉम्प्ट-इंजेक्शनसारखे दिसणारे उतारे शोधून दाखवते.",
   disclaimer: "हे एक शोधक साधन आहे, हमी नाही.",
   language: "भाषा",
@@ -90,6 +98,10 @@ const mr: Strings = {
 };
 
 const hi: Strings = {
+  challenge: "सेवा फर्स्ट इनोवेशन चैलेंज के लिए हमारी प्रविष्टि",
+  zone: "महाराष्ट्र ज़ोन",
+  bannerAlt: "सेवा फर्स्ट इनोवेशन चैलेंज, महाराष्ट्र ज़ोन",
+  madeFor: "महाराष्ट्र में बना, भारत के लिए।",
   tagline: "प्रॉम्प्ट-इंजेक्शन जैसे दिखने वाले अंशों को चिह्नित करता है।",
   disclaimer: "यह एक डिटेक्टर है, गारंटी नहीं।",
   language: "भाषा",

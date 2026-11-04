@@ -1,6 +1,8 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { LANGS, STRINGS, type Lang } from "./i18n";
 import { Results } from "./Results";
+import { BhagwaFlag, Chakra } from "./Motifs";
+import banner from "./assets/seva-first-banner.png";
 import type { ScanResult } from "./types";
 
 function savedLang(): Lang {
@@ -53,7 +55,7 @@ export default function App() {
       <header className="letterhead">
         <div className="letterhead-inner">
           <div>
-            <h1>PatraRakshak</h1>
+            <h1 lang="mr">पत्ररक्षक</h1>
             <p>{t.tagline} {t.disclaimer}</p>
           </div>
           <fieldset className="langs">
@@ -67,6 +69,17 @@ export default function App() {
           </fieldset>
         </div>
       </header>
+      <div className="tiranga" aria-hidden="true"><span /><span /><span /></div>
+      <section className="challenge" aria-label={t.challenge}>
+        <div className="challenge-inner">
+          <img src={banner} width={565} height={214} alt={t.bannerAlt} />
+          <div className="challenge-text">
+            <p className="challenge-kicker">{t.challenge}</p>
+            <p className="challenge-zone">{t.zone}</p>
+            <p className="jai" lang="mr"><BhagwaFlag /> <span className="jai-text">जय महाराष्ट्र! जय हिंद!</span></p>
+          </div>
+        </div>
+      </section>
       <main className="layout">
         <form className="sheet sample" onSubmit={onSubmit}>
           <h2>{t.sample}</h2>
@@ -80,7 +93,7 @@ export default function App() {
             <span className="file-name">{file?.name ?? t.noFile}</span>
           </div>
           <div className="actions">
-            <button type="submit" className="primary" disabled={busy || (!file && !text.trim())}>{busy ? t.scanning : t.scan}</button>
+            <button type="submit" className="primary" disabled={busy || (!file && !text.trim())}>{busy ? <><Chakra /> {t.scanning}</> : t.scan}</button>
             <button type="button" onClick={clear}>{t.clear}</button>
           </div>
         </form>
@@ -89,6 +102,14 @@ export default function App() {
           <Results result={result} scannedAt={scannedAt} lang={lang} t={t} />
         </div>
       </main>
+      <footer className="site-foot">
+        <div className="warli" aria-hidden="true"><div className="warli-row" /></div>
+        <div className="site-foot-inner">
+          <p><strong lang="mr">पत्ररक्षक</strong> · {t.madeFor}</p>
+          <p className="jai" lang="mr"><BhagwaFlag /> जय महाराष्ट्र! जय हिंद!</p>
+        </div>
+        <div className="tiranga" aria-hidden="true"><span /><span /><span /></div>
+      </footer>
     </>
   );
 }
