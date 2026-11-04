@@ -101,7 +101,7 @@ export function Results({ result, scannedAt, lang, t }: Props) {
           </div>
         </>
       )}
-      <p className="disclaimer">PatraRakshak · {t.disclaimer}</p>
+      <p className="disclaimer"><span lang="mr">पत्ररक्षक</span> · {t.disclaimer}</p>
     </section>
   );
 }
