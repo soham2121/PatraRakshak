@@ -1,0 +1,129 @@
+{
+  "model_version": "muril-v3",
+  "threshold": 0.9923816323280336,
+  "data/processed/hard_eval.parquet": {
+    "precision": 0.9605,
+    "recall": 0.8,
+    "f1": 0.8729,
+    "fpr": 0.0189,
+    "confusion": {
+      "tn": 622,
+      "fp": 12,
+      "fn": 73,
+      "tp": 292
+    },
+    "n": 999,
+    "ms_per_text": 41.38,
+    "flag_rate_by_category": {
+      "benign_procedural": 0.019,
+      "quoted_in_document": 0.73,
+      "quoted_in_prose": 0.67,
+      "social_engineering": 0.844,
+      "social_engineering_in_document": 0.95
+    }
+  },
+  "data/processed/indic_eval.parquet": {
+    "precision": 0.996,
+    "recall": 0.9844,
+    "f1": 0.9902,
+    "fpr": 0.0042,
+    "confusion": {
+      "tn": 239,
+      "fp": 1,
+      "fn": 4,
+      "tp": 252
+    },
+    "n": 496,
+    "ms_per_text": 41.42,
+    "flag_rate_by_category": {
+      "benign_document": 0.008,
+      "benign_form": 0.0,
+      "english_attack_in_document": 0.992,
+      "native_attack": 0.875,
+      "native_attack_in_document": 0.992
+    }
+  },
+  "data/processed/agentic_eval.parquet": {
+    "precision": 0.9593,
+    "recall": 0.9188,
+    "f1": 0.9386,
+    "fpr": 0.0755,
+    "confusion": {
+      "tn": 147,
+      "fp": 12,
+      "fn": 25,
+      "tp": 283
+    },
+    "n": 467,
+    "ms_per_text": 26.96,
+    "flag_rate_by_category": {
+      "approval_authority_escalation/api_header_forged_approval": 1.0,
+      "approval_authority_escalation/document_metadata_forged_stamp": 1.0,
+      "approval_authority_escalation/email_after_the_fact_countersign": 0.929,
+      "approval_authority_escalation/rag_contract_power_of_attorney": 1.0,
+      "approval_authority_escalation/signature_block_esign_approval": 1.0,
+      "approval_authority_escalation/ticket_comment_status_spoof": 1.0,
+      "approval_authority_escalation/webpage_banner_session_elevation": 1.0,
+      "benign/command_inside_code_or_log": 0.0,
+      "benign/hard_negative": 0.022,
+      "benign/legitimate_roleplay_request": 0.0,
+      "benign/quoting_attack_for_analysis": 0.917,
+      "benign/researcher_building_eval": 0.0,
+      "memory_trust_boundary/browser_agent_persist": 1.0,
+      "memory_trust_boundary/fake_authority_policy": 1.0,
+      "memory_trust_boundary/persistent_cookie_metaphor": 1.0,
+      "memory_trust_boundary/tool_output_poison": 1.0,
+      "rag_document_embedded/rag_citation_spoof": 1.0,
+      "rag_document_embedded/slack_export": 1.0,
+      "rag_document_embedded/spec_notes_field": 1.0,
+      "tool_function_abuse/fake_tool_registration_fallback": 1.0,
+      "tool_function_abuse/indirect_injection_hidden_step": 1.0,
+      "tool_function_abuse/malicious_macro_trigger": 1.0,
+      "tool_function_abuse/rate_limit_escalation_pretext": 0.643,
+      "tool_function_abuse/sandbox_pretext_privilege_escalation": 0.643,
+      "tool_function_abuse/support_ticket_indirect_exfil": 1.0,
+      "tool_function_abuse/task_wrapper_smuggle": 1.0,
+      "tool_function_abuse/test_coverage_pretext_real_call": 0.0
+    }
+  },
+  "data/processed/bipia_eval.parquet": {
+    "precision": 0.6761,
+    "recall": 0.86,
+    "f1": 0.757,
+    "fpr": 0.412,
+    "confusion": {
+      "tn": 294,
+      "fp": 206,
+      "fn": 70,
+      "tp": 430
+    },
+    "n": 1000,
+    "ms_per_text": 158.6,
+    "flag_rate_by_category": {
+      "benign_document_gpt": 0.412,
+      "bipia_attack_document": 0.86
+    }
+  },
+  "evals/hard_negatives.jsonl": {
+    "precision": 0.4906,
+    "recall": 0.65,
+    "f1": 0.5591,
+    "fpr": 0.18,
+    "confusion": {
+      "tn": 123,
+      "fp": 27,
+      "fn": 14,
+      "tp": 26
+    },
+    "n": 190,
+    "ms_per_text": 19.98,
+    "flag_rate_by_category": {
+      "human_instruction": 0.333,
+      "policy_document": 0.033,
+      "quoted_example_without_operative_instruction": 0.0,
+      "quoted_operative_instruction": 0.65,
+      "security_discussion": 0.0,
+      "technical_docs": 0.533
+    }
+  }
+}

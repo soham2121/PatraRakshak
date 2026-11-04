@@ -23,6 +23,10 @@ def load(model_dir: str | None = None):
 
         pipe = joblib.load(d / "model.joblib")
         return (lambda texts: pipe.predict_proba(texts)[:, 1].tolist()), meta
+    if meta["kind"] == "ensemble":
+        # Mean of member scores per window; members are model dirs relative to this one.
+        members = [load(str(d / m))[0] for m in meta["members"]]
+        return (lambda texts: [sum(s) / len(s) for s in zip(*(f(texts) for f in members))]), meta
 
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer

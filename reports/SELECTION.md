@@ -66,3 +66,56 @@ Edge cases (`reports/muril-v1-edge-cases.json`): the benign Devanagari+emoji cas
 **Reading.** muril-v1 fixes the non-English false-positive problem and meets the external FPR target, but it loses external recall (mostly English social-engineering and obfuscation rows) and goes over the Wikipedia document FPR target. If Marathi/Hindi documents are in scope, which the Seva pitch says they are, muril-v1 is the only candidate that is usable on them. The Marathi/Hindi eval is small and template-based, so its numbers show the direction, not production accuracy.
 
 **Decision (2026-10-12): ship `muril-v1`.** The team switched the shipped model to `muril-v1` because the product targets Marathi/Hindi government forms, and `distilbert-v1` can't be used on them (100% FPR on `indic_eval`). The switch is also consistent with the rule's step 3 on validation (98.1% vs 97.9% `indirect_document` recall). The accepted costs are lower external recall (0.678) and a Wikipedia document FPR of 11.5%; both are listed as misses in the README. `distilbert-v1` stays available as GitHub Release `model-distilbert-v1`.
+
+## Addendum: candidate `muril-v2` (2026-10-28), rejected
+
+Motivation: manual long-document tests (`tests/fixtures/longdocs/`, `tests/test_longdocs.py`) showed muril-v1 missing social-engineering attacks and attacks quoted inside explanatory prose. The pipeline was checked first and is not the cause: the attack windows really score under the threshold.
+
+`muril-v2` is `google/muril-base-cased` fine-tuned on `train` + `indic_train` + `hard_train` (`data/build_hard.py`), same hyperparameters as muril-v1, trained in 290 s on an RTX 5070 Ti. Judged by the unchanged rule above, on validation only, after the chunking change of the same day (over-long sentences are now split with a 128-char overlap; muril-v1's numbers did not move). Source: `reports/muril-v2-selection-val.json`.
+
+| Option | Threshold | Val `benign_document` FPR | Hard-negatives FPR | Val `indirect_document` recall | Passes? |
+|---|---|---|---|---|---|
+| muril-v2 @ 0.05 | 0.002 | 0.9% | 83.3% | 99.8% | no (hard negatives) |
+| muril-v2 @ 0.02 | 0.963 | 0.2% | 45.3% | 99.1% | no (hard negatives) |
+| muril-v2 @ 0.01 | 0.9896 | 0.2% | 39.3% | 98.5% | no (hard negatives) |
+
+**No option passes step 2, so muril-v1 stays the shipped model.** The frozen test sets were not run for muril-v2.
+
+What it gained and what it cost, at each model's 0.01 option (`reports/muril-v2-val.json`; validation-side sets only):
+
+| Set / category | muril-v1 | muril-v2 |
+|---|---|---|
+| `hard_eval` social engineering in a document (recall) | 75.8% | 97.5% |
+| `hard_eval` quoted in prose (recall) | 94.0% | 99.0% |
+| `hard_eval` benign procedural (FPR) | 1.1% | 0.2% |
+| `indic_eval` FPR / recall | 0% / 96.5% | 0% / 99.2% |
+| Hard negatives: quoted example without an operative instruction (FPR) | 10.0% | 53.3% |
+| Hard negatives: security discussion (FPR) | 6.7% | 40.0% |
+| Hard negatives: technical docs (FPR) | 40.0% | 60.0% |
+
+Reading: training on quoted-in-prose attacks taught the model that quoting or discussing instructions is itself suspicious. `hard_eval` gains are also partly template recall: on the hand-written long-document fixtures muril-v2 still misses all three social-engineering passages, while it does catch the quoted attack in the cybersecurity article and no longer flags the admissions guide. A next candidate needs benign training text that discusses and quotes attacks without containing one. The muril-v2 weights were deleted and never released; rebuild with `python -m data.build_hard` and `PR_EXTRA_TRAIN=indic_train,hard_train python -m train.finetune models/muril-v2 google/muril-base-cased`.
+
+## Addendum: `muril-v3` and `muril-ens` (2026-10-28), muril-ens selected
+
+`muril-v3` is `google/muril-base-cased` fine-tuned on `train` + `indic_train` + `agentic_train` (`data/build_extra.py`; 3nesdeniz/agentic-prompt-injection-5k `train` split), same hyperparameters, 298 s on an RTX 5070 Ti. `muril-ens` is no new training: the per-window mean of muril-v1 and muril-v3 scores (`"kind": "ensemble"` in `patrarakshak/detector.py`). All three were judged by the unchanged rule on validation only (`reports/muril-v3-selection-val.json`, `reports/muril-ens-selection-val.json`, `reports/muril-ens-val.json`):
+
+| Option | Threshold | Val `benign_document` FPR | Hard-negatives FPR | Val `indirect_document` recall | Passes step 2? |
+|---|---|---|---|---|---|
+| muril-v1 @ 0.01 | 0.9819 | 0.2% | 18.7% | 98.13% | yes |
+| muril-v3 @ 0.05 / 0.02 | 0.003 / 0.868 | 2.1% / 0.4% | 30.7% / 21.3% | 99.8% / 99.4% | no (hard negatives) |
+| muril-v3 @ 0.01 | 0.9924 | 0.2% | 18.0% | 97.94% | yes |
+| muril-ens @ 0.05 / 0.02 | 0.006 / 0.633 | 1.5% / 0.2% | 87.3% / 22.7% | 99.8% / 99.3% | no (hard negatives) |
+| **muril-ens @ 0.01** | **0.9783** | **0.2%** | **17.3%** | **98.69%** | **yes, selected** |
+
+By step 3, **muril-ens @ 0.01 is selected** (highest `indirect_document` recall among passing options) and becomes the shipped model. The margins are small (about three documents of recall and two hard-negative lines over muril-v1). It costs twice the memory and CPU of muril-v1, which matters for the Azure deployment.
+
+Other validation-side sets, each model at its 0.01 option:
+
+| Set | muril-v1 | muril-v3 | muril-ens |
+|---|---|---|---|
+| `agentic_eval` recall / FPR | 45.5% / 12.0% | 91.9% / 7.5% | 78.3% / 8.2% |
+| `bipia_eval` recall / FPR (1,000 whole documents) | 76.4% / 32.4% | 86.0% / 41.2% | 83.4% / 38.0% |
+| `hard_eval` recall / FPR | 87.1% / 1.1% | 80.0% / 1.9% | 81.4% / 1.3% |
+| `indic_eval` recall / FPR | 96.5% / 0% | 98.4% / 0.4% | 98.4% / 0% |
+
+Test-side numbers, run once for muril-ens (frozen sets already used by five models, so optimistic): in-distribution F1 0.951; external FPR **4.0%** (muril-v1 14.5%) and recall 0.656 (0.678); documents recall 0.990 / 0.955 and FPR 11.0% / 3.0% (Wikipedia / bills). The frozen sets were not run for muril-v3 alone. Weights: Release `model-muril-ens` (muril-v3 and the ensemble config) alongside `model-muril-v1`.

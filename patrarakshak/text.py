@@ -6,6 +6,8 @@ INVISIBLE = re.compile("[​-‏‪-‮⁠-⁤﻿\U000e0000-\U000e007f]")
 # Tag characters U+E0020..E007E mirror ASCII and are used to hide instructions; decode, don't drop.
 TAGS = {c: c - 0xE0000 for c in range(0xE0020, 0xE007F)}
 BOUNDARY = re.compile(r"(?<=[.!?])\s+|\n\s*\n")
+# Hard-split pieces of an over-long sentence overlap by this much, so a phrase across a cut is scored whole.
+HARD_SPLIT_OVERLAP = 128
 
 
 def normalize(text: str) -> str:
@@ -40,7 +42,7 @@ def chunk(text: str, max_chars: int = 512) -> list[tuple[int, int]]:
 
 
 def _windows(text: str, max_chars: int) -> list[tuple[int, int]]:
-    sents = [(i, min(i + max_chars, e)) for s, e in sentences(text) for i in range(s, e, max_chars)]
+    sents = [p for s, e in sentences(text) for p in _pieces(s, e, max_chars)]
     out, i = [], 0
     while i < len(sents):
         j = i
@@ -50,4 +52,13 @@ def _windows(text: str, max_chars: int) -> list[tuple[int, int]]:
         if j + 1 == len(sents):
             break
         i = max(j, i + 1)
+    return out
+
+
+def _pieces(s: int, e: int, max_chars: int) -> list[tuple[int, int]]:
+    """Cuts one sentence into pieces of <= max_chars, each overlapping the previous by HARD_SPLIT_OVERLAP."""
+    out = [(s, min(s + max_chars, e))]
+    while out[-1][1] < e:
+        start = out[-1][1] - HARD_SPLIT_OVERLAP
+        out.append((start, min(start + max_chars, e)))
     return out

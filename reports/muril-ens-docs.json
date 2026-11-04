@@ -1,0 +1,7 @@
+{
+  "model_version": "muril-ens",
+  "doc_recall": 0.99,
+  "doc_fpr": 0.11,
+  "span_hit_rate": 0.985,
+  "n": 400
+}

@@ -1,0 +1,32 @@
+[
+ {
+  "model": "muril-v2",
+  "max_fpr": 0.05,
+  "threshold": 0.0018896680558100345,
+  "val_fpr": 0.0499,
+  "val_recall": 0.9972,
+  "benign_document_fpr": 0.0094,
+  "indirect_document_recall": 0.9981,
+  "hard_negatives_fpr": 0.8333
+ },
+ {
+  "model": "muril-v2",
+  "max_fpr": 0.02,
+  "threshold": 0.9628441333770753,
+  "val_fpr": 0.0191,
+  "val_recall": 0.9747,
+  "benign_document_fpr": 0.0019,
+  "indirect_document_recall": 0.9906,
+  "hard_negatives_fpr": 0.4533
+ },
+ {
+  "model": "muril-v2",
+  "max_fpr": 0.01,
+  "threshold": 0.9896369576454164,
+  "val_fpr": 0.0096,
+  "val_recall": 0.9625,
+  "benign_document_fpr": 0.0019,
+  "indirect_document_recall": 0.985,
+  "hard_negatives_fpr": 0.3933
+ }
+]

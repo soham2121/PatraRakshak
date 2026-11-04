@@ -1,0 +1,281 @@
+[
+ {
+  "combo": "v1",
+  "max_fpr": 0.05,
+  "threshold": 0.006397,
+  "val": {
+   "fpr": 0.0499,
+   "recall": 0.9944
+  },
+  "hard_negatives": {
+   "fpr": 0.8933,
+   "recall": 1.0
+  },
+  "hard_eval": {
+   "fpr": 0.2208,
+   "recall": 0.9973
+  },
+  "indic_eval": {
+   "fpr": 0.0833,
+   "recall": 1.0
+  },
+  "agentic_eval": {
+   "fpr": 1.0,
+   "recall": 1.0
+  },
+  "bipia_eval": {
+   "fpr": 0.63,
+   "recall": 0.994
+  },
+  "benign_document_fpr": 0.0112,
+  "indirect_document_recall": 0.9981
+ },
+ {
+  "combo": "v1",
+  "max_fpr": 0.02,
+  "threshold": 0.959679,
+  "val": {
+   "fpr": 0.0191,
+   "recall": 0.9654
+  },
+  "hard_negatives": {
+   "fpr": 0.3667,
+   "recall": 0.825
+  },
+  "hard_eval": {
+   "fpr": 0.0205,
+   "recall": 0.9534
+  },
+  "indic_eval": {
+   "fpr": 0.0042,
+   "recall": 0.9883
+  },
+  "agentic_eval": {
+   "fpr": 0.5723,
+   "recall": 0.776
+  },
+  "bipia_eval": {
+   "fpr": 0.406,
+   "recall": 0.876
+  },
+  "benign_document_fpr": 0.0037,
+  "indirect_document_recall": 0.9888
+ },
+ {
+  "combo": "v1",
+  "max_fpr": 0.01,
+  "threshold": 0.981945,
+  "val": {
+   "fpr": 0.0096,
+   "recall": 0.9532
+  },
+  "hard_negatives": {
+   "fpr": 0.1867,
+   "recall": 0.75
+  },
+  "hard_eval": {
+   "fpr": 0.011,
+   "recall": 0.8712
+  },
+  "indic_eval": {
+   "fpr": 0.0,
+   "recall": 0.9648
+  },
+  "agentic_eval": {
+   "fpr": 0.1195,
+   "recall": 0.4545
+  },
+  "bipia_eval": {
+   "fpr": 0.324,
+   "recall": 0.764
+  },
+  "benign_document_fpr": 0.0019,
+  "indirect_document_recall": 0.9813
+ },
+ {
+  "combo": "v3",
+  "max_fpr": 0.05,
+  "threshold": 0.002597,
+  "val": {
+   "fpr": 0.0499,
+   "recall": 0.9916
+  },
+  "hard_negatives": {
+   "fpr": 0.3067,
+   "recall": 0.875
+  },
+  "hard_eval": {
+   "fpr": 0.1262,
+   "recall": 0.9397
+  },
+  "indic_eval": {
+   "fpr": 0.0125,
+   "recall": 1.0
+  },
+  "agentic_eval": {
+   "fpr": 0.0881,
+   "recall": 0.9513
+  },
+  "bipia_eval": {
+   "fpr": 0.61,
+   "recall": 0.982
+  },
+  "benign_document_fpr": 0.0206,
+  "indirect_document_recall": 0.9981
+ },
+ {
+  "combo": "v3",
+  "max_fpr": 0.02,
+  "threshold": 0.868106,
+  "val": {
+   "fpr": 0.0191,
+   "recall": 0.9757
+  },
+  "hard_negatives": {
+   "fpr": 0.2133,
+   "recall": 0.7
+  },
+  "hard_eval": {
+   "fpr": 0.0363,
+   "recall": 0.8603
+  },
+  "indic_eval": {
+   "fpr": 0.0042,
+   "recall": 0.9883
+  },
+  "agentic_eval": {
+   "fpr": 0.0818,
+   "recall": 0.9383
+  },
+  "bipia_eval": {
+   "fpr": 0.48,
+   "recall": 0.932
+  },
+  "benign_document_fpr": 0.0037,
+  "indirect_document_recall": 0.9944
+ },
+ {
+  "combo": "v3",
+  "max_fpr": 0.01,
+  "threshold": 0.992382,
+  "val": {
+   "fpr": 0.0096,
+   "recall": 0.956
+  },
+  "hard_negatives": {
+   "fpr": 0.18,
+   "recall": 0.65
+  },
+  "hard_eval": {
+   "fpr": 0.0189,
+   "recall": 0.8
+  },
+  "indic_eval": {
+   "fpr": 0.0042,
+   "recall": 0.9844
+  },
+  "agentic_eval": {
+   "fpr": 0.0755,
+   "recall": 0.9188
+  },
+  "bipia_eval": {
+   "fpr": 0.412,
+   "recall": 0.86
+  },
+  "benign_document_fpr": 0.0019,
+  "indirect_document_recall": 0.9794
+ },
+ {
+  "combo": "mean",
+  "max_fpr": 0.05,
+  "threshold": 0.005668,
+  "val": {
+   "fpr": 0.0499,
+   "recall": 0.9944
+  },
+  "hard_negatives": {
+   "fpr": 0.8733,
+   "recall": 1.0
+  },
+  "hard_eval": {
+   "fpr": 0.1656,
+   "recall": 0.9973
+  },
+  "indic_eval": {
+   "fpr": 0.075,
+   "recall": 1.0
+  },
+  "agentic_eval": {
+   "fpr": 1.0,
+   "recall": 1.0
+  },
+  "bipia_eval": {
+   "fpr": 0.616,
+   "recall": 0.986
+  },
+  "benign_document_fpr": 0.015,
+  "indirect_document_recall": 0.9981
+ },
+ {
+  "combo": "mean",
+  "max_fpr": 0.02,
+  "threshold": 0.632923,
+  "val": {
+   "fpr": 0.0191,
+   "recall": 0.9766
+  },
+  "hard_negatives": {
+   "fpr": 0.2267,
+   "recall": 0.725
+  },
+  "hard_eval": {
+   "fpr": 0.0315,
+   "recall": 0.8712
+  },
+  "indic_eval": {
+   "fpr": 0.0,
+   "recall": 0.9883
+  },
+  "agentic_eval": {
+   "fpr": 0.0818,
+   "recall": 0.9058
+  },
+  "bipia_eval": {
+   "fpr": 0.476,
+   "recall": 0.924
+  },
+  "benign_document_fpr": 0.0019,
+  "indirect_document_recall": 0.9925
+ },
+ {
+  "combo": "mean",
+  "max_fpr": 0.01,
+  "threshold": 0.978308,
+  "val": {
+   "fpr": 0.0096,
+   "recall": 0.9579
+  },
+  "hard_negatives": {
+   "fpr": 0.1733,
+   "recall": 0.7
+  },
+  "hard_eval": {
+   "fpr": 0.0126,
+   "recall": 0.8137
+  },
+  "indic_eval": {
+   "fpr": 0.0,
+   "recall": 0.9844
+  },
+  "agentic_eval": {
+   "fpr": 0.0818,
+   "recall": 0.7825
+  },
+  "bipia_eval": {
+   "fpr": 0.38,
+   "recall": 0.834
+  },
+  "benign_document_fpr": 0.0019,
+  "indirect_document_recall": 0.9869
+ }
+]

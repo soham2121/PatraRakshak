@@ -1,0 +1,102 @@
+{
+ "empty": {
+  "status": 422,
+  "label": null,
+  "expected": [
+   422,
+   null
+  ],
+  "ok": true,
+  "score": null,
+  "truncated": null,
+  "signals": null,
+  "chunks": null,
+  "seconds": 0.01
+ },
+ "150k_chars_with_attack_at_start": {
+  "status": 200,
+  "label": "suspicious",
+  "expected": [
+   200,
+   "suspicious"
+  ],
+  "ok": true,
+  "score": 0.9966061115264893,
+  "truncated": true,
+  "signals": [],
+  "chunks": 291,
+  "seconds": 14.55
+ },
+ "150k_chars_benign": {
+  "status": 200,
+  "label": "benign",
+  "expected": [
+   200,
+   "benign"
+  ],
+  "ok": true,
+  "score": 0.004878018400631845,
+  "truncated": true,
+  "signals": [],
+  "chunks": 291,
+  "seconds": 14.39
+ },
+ "devanagari_and_emoji_benign": {
+  "status": 200,
+  "label": "benign",
+  "expected": [
+   200,
+   "benign"
+  ],
+  "ok": true,
+  "score": 0.03317706263624132,
+  "truncated": false,
+  "signals": [],
+  "chunks": 1,
+  "seconds": 0.04
+ },
+ "zero_width_obfuscated_attack": {
+  "status": 200,
+  "label": "suspicious",
+  "expected": [
+   200,
+   "suspicious"
+  ],
+  "ok": true,
+  "score": 0.9959546327590942,
+  "truncated": false,
+  "signals": [
+   "invisible_characters"
+  ],
+  "chunks": 1,
+  "seconds": 0.04
+ },
+ "paragraph_repeated_1000x": {
+  "status": 200,
+  "label": "benign",
+  "expected": [
+   200,
+   "benign"
+  ],
+  "ok": true,
+  "score": 0.004044209839776158,
+  "truncated": false,
+  "signals": [],
+  "chunks": 250,
+  "seconds": 12.32
+ },
+ "docx_attack_only_in_comment": {
+  "status": 200,
+  "label": "suspicious",
+  "expected": [
+   200,
+   "suspicious"
+  ],
+  "ok": true,
+  "score": 0.9819671213626862,
+  "truncated": false,
+  "signals": [],
+  "chunks": 1,
+  "seconds": 0.09
+ }
+}
